@@ -68,7 +68,7 @@ fn create_command_stmts(ctx: &Context, expr: &Expr) -> syn::Result<TokenStream> 
     let expr_span = expr.span();
     Ok(quote_spanned! {expr_span=>
         __ctx.params.add(#core::eml::Param::from_commands("with", ::std::boxed::Box::new(move |c| {
-            c.insert(#expr)
+            c.insert(#expr);
         })));
     })
 }
