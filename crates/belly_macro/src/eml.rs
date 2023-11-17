@@ -30,45 +30,45 @@ fn create_single_command_stmt(expr: &ExprPath) -> syn::Result<TokenStream> {
 
 fn create_command_stmts(ctx: &Context, expr: &Expr) -> syn::Result<TokenStream> {
     let core = ctx.core_path();
-    let with_body = match expr {
-        Expr::Path(path) => create_single_command_stmt(path)?,
-        Expr::Field(field) => {
-            let component_span = field.span();
-            quote_spanned! {component_span=>
-                c.insert(#field);
-            }
-        }
-        Expr::Tuple(components) => {
-            let mut components_expr = quote! {};
-            for component_expr in components.elems.iter() {
-                let component_span = component_expr.span();
-                match &component_expr {
-                    Expr::Path(component) => {
-                        let component_expr = create_single_command_stmt(component)?;
-                        components_expr = quote_spanned! {component_span=>
-                            #components_expr
-                            #component_expr
-                        }
-                    }
-                    Expr::Field(field) => {
-                        components_expr = quote_spanned! {component_span=>
-                            #components_expr
-                            c.insert(#field);
-                        }
-                    }
-                    _ => {
-                        throw!(component_span, "Invalid component name")
-                    }
-                }
-            }
-            components_expr
-        }
-        _ => throw!(expr.span(), "Invalid components declaration"),
-    };
+    // let with_body = match expr {
+    //     Expr::Path(path) => create_single_command_stmt(path)?,
+    //     Expr::Field(field) => {
+    //         let component_span = field.span();
+    //         quote_spanned! {component_span=>
+    //             c.insert(#field);
+    //         }
+    //     }
+    //     Expr::Tuple(components) => {
+    //         let mut components_expr = quote! {};
+    //         for component_expr in components.elems.iter() {
+    //             let component_span = component_expr.span();
+    //             match &component_expr {
+    //                 Expr::Path(component) => {
+    //                     let component_expr = create_single_command_stmt(component)?;
+    //                     components_expr = quote_spanned! {component_span=>
+    //                         #components_expr
+    //                         #component_expr
+    //                     }
+    //                 }
+    //                 Expr::Field(field) => {
+    //                     components_expr = quote_spanned! {component_span=>
+    //                         #components_expr
+    //                         c.insert(#field);
+    //                     }
+    //                 }
+    //                 _ => {
+    //                     throw!(component_span, "Invalid component name")
+    //                 }
+    //             }
+    //         }
+    //         components_expr
+    //     }
+    //     _ => throw!(expr.span(), "Invalid components declaration"),
+    // };
     let expr_span = expr.span();
     Ok(quote_spanned! {expr_span=>
         __ctx.params.add(#core::eml::Param::from_commands("with", ::std::boxed::Box::new(move |c| {
-            #with_body
+            c.insert(#expr)
         })));
     })
 }
