@@ -11,22 +11,22 @@ macro_rules! throw {
     };
 }
 
-fn create_single_command_stmt(expr: &ExprPath) -> syn::Result<TokenStream> {
-    let component_span = expr.span();
-    if let Some(component) = expr.path.get_ident() {
-        if component.to_string().chars().next().unwrap().is_uppercase() {
-            Ok(quote_spanned! {component_span=>
-                c.insert(#component::default());
-            })
-        } else {
-            Ok(quote_spanned! {component_span=>
-                c.insert(#component);
-            })
-        }
-    } else {
-        throw!(component_span, "Invalid components declaration")
-    }
-}
+// fn create_single_command_stmt(expr: &ExprPath) -> syn::Result<TokenStream> {
+//     let component_span = expr.span();
+//     if let Some(component) = expr.path.get_ident() {
+//         if component.to_string().chars().next().unwrap().is_uppercase() {
+//             Ok(quote_spanned! {component_span=>
+//                 c.insert(#component::default());
+//             })
+//         } else {
+//             Ok(quote_spanned! {component_span=>
+//                 c.insert(#component);
+//             })
+//         }
+//     } else {
+//         throw!(component_span, "Invalid components declaration")
+//     }
+// }
 
 fn create_command_stmts(ctx: &Context, expr: &Expr) -> syn::Result<TokenStream> {
     let core = ctx.core_path();
