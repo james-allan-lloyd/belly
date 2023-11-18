@@ -95,15 +95,15 @@ For configuring widget style & behavior you can pass attributes within the tag. 
 
 ## Tags, Widgets & Content
 
-As I said `eml` consists of tags with attributes. Everything between the open-closing tag pair (`<span>...</span>`) becomes the children of this tag. The tag also may have no children at all, the self-closing tag used in this case: `<button/>`. Every tag may have this kind of child:
+As I said `eml` consists of tags with attributes. Everything between a open-closing tag pair (`<span>...</span>`) becomes the children of the tag. A tag may also have no children at all, and a self-closing tag can be used in this case: `<button/>`. Tags may have a few different kinds of child:
 
 - other tags: `<span><button/></span>`
 - string literals: `<span>"Hello world!"</span>`
 - rust blocks: `<span>{ some_content() }</span>`
 
-Rust block can be any expression that returns `impl IntoContent`. `String` implements the `IntoContent` trait for example, as well as `Vec<Entity>` does. Some other types provide this implementation too, `binds`, for example, I'll talk about this later.
+Rust block can be any expression that returns `impl IntoContent`. `String` implements the `IntoContent` trait for example, as well as `Vec<Entity>`. Some other types provide this implementation too, `binds`, for example, I'll talk about this later.
 
-As I mentioned earlier, almost every tag meant to be `Widget`it produces one or more entities with their own set of components, styles, and states. I will talk about widgets all the time. Later I'll introduce to you non-widget tags & some templating features of `belly` but for now, let's focus on widgets and styling features.
+As I mentioned earlier, almost every tag meant to be `Widget` produces one or more entities with their own set of components, styles, and states. Most of this guide I will be referring to Widgets, but later I'll introduce to you non-widget tags & some templating features of `belly`. For now though, let's focus on widgets and styling features.
 
 ## Styling
 
@@ -113,8 +113,7 @@ There are two ways to provide style properties to nodes: by passing style param 
 
 ### Style Params
 
-The easiest way to provide some style to your UI using `belly` is to pass some params directly
-to widgets:
+The easiest way to provide some style to your UI using `belly` is to pass some params directly to widgets:
 
 ```rust
 // examples/style-params.rs
@@ -146,7 +145,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-![Style Params Screenshot](docs/img/style-params.png)
+![Style Params Screenshot](img/style-params.png)
 
 In the example above you can see various ways to pass style params to nodes.
 
@@ -304,7 +303,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-![Selectors](docs/img/examples/selectors.gif)
+![Selectors](img/examples/selectors.gif)
 
 In this example, I apply classes (`red`, `green`, `blue`, `content`) to the nodes and define `StyleSheet` with precise rules to achieve the task: three buttons of defined colors, each becoming white on hover.
 
@@ -390,7 +389,7 @@ commands.add(eml! {
 
 | Bevy                                  | Web                                 |
 ||-|
-| ![Bevy](docs/img/resolving-bevy.png)  | ![Web](docs/img/resolving-web.png)  |
+| ![Bevy](img/resolving-bevy.png)  | ![Web](img/resolving-web.png)  |
 
 ### Managed properties
 
@@ -642,7 +641,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ctx.connect()                                               // |
                 .entity(btn)                                            // |
                 .on(button_pressed)                                     // |
-                // Like this:               <`
+                // Like this:               <------------------------------`
                 // run! macro in form run!(for entity |...| { })
                 // specifies the custom target entity the handler
                 // will be executed on.
@@ -656,7 +655,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 ```
 
-![Connections](docs/img/examples/connections.gif)
+![Connections](img/examples/connections.gif)
 
 ### Connecting Widgets
 
@@ -706,7 +705,7 @@ fn update_label(mut query: Query<(&Counter, &mut Label), Changed<Counter>>) {
 }
 ```
 
-![Counter Example](docs/img/examples/counter.gif)
+![Counter Example](img/examples/counter.gif)
 
 When you want to connect the event to the handler you specify `on:event` attribute with handler as value. The `eml!` macro will expand this attributes to something similar to code from previous section: `commands.connect().entity(e).on(press).handle(...)`.
 
@@ -843,7 +842,7 @@ This bind says: when `value` of `Health` component on `player` entity changes, c
 
 `belly` will call `color()` method on `Transformers` struct to get color transformer and then call `r` method on this transformer to obtain the function pointer that calls `color.set_r(val)` if necessary when `Health.value` (`val`) is changed.
 
-`belly` comes with some predefined global transformers listed [here](docs/transformers.md). The other ones you can implement by yourself when needed. I'll give you detailed instructions on how to implement global transformers later.
+`belly` comes with some predefined global transformers listed [here](transformers.md). The other ones you can implement by yourself when needed. I'll give you detailed instructions on how to implement global transformers later.
 
 The last thing I want to notice here: you can pass global transformers to any `from!` or `to!` macro, but not both. The previous piece of code could be written like this:
 
@@ -885,7 +884,7 @@ So `associated` keyword in `associated transformers` means `associated with the 
 
 Unfortunately, when you use `from!` macro the target type is unknown. This is why the only limitation of associated transformers is: they are available only within `to!` macro.
 
-`belly` comes with some predefined associated transformers listed [here](docs/transformers.md). The other ones you can implement for your types by yourself when needed. I'll give you detailed instruction on how to implement associated transformers later.
+`belly` comes with some predefined associated transformers listed [here](transformers.md). The other ones you can implement for your types by yourself when needed. I'll give you detailed instruction on how to implement associated transformers later.
 
 ### Binding from Resources
 
@@ -923,7 +922,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-![Timer Example](docs/img/timer.gif)
+![Timer Example](img/timer.gif)
 
 Pay attention to how the bind is written in this example. I do not use `<label>` here, but put `from!` bind as a direct child of the body. I've mentioned earlier that rust blocks may be passed as children to tags and it is also an example of how this feature may be used: binds produced by `from!` macro implements the `IntoContent` trait and can be added as content.
 
@@ -1030,10 +1029,10 @@ fn toggle_container(ctx: &mut EventContext<impl Event>) {
 }
 ```
 
-![Elements Modification](docs/img/examples/elements-modification.gif)
+![Elements Modification](img/examples/elements-modification.gif)
 
 You can look at even more complex example with complete interface of character editing [here](examples#party-editor):
-![Party Editor](docs/img/examples/party-editor.gif)
+![Party Editor](img/examples/party-editor.gif)
 
 ## Templating
 
@@ -1120,7 +1119,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-![Sliders Example](docs/img/examples/sliders.gif)
+![Sliders Example](img/examples/sliders.gif)
 
 To understand this example better you need to remember (or read from docs when somebody writes it) that `<progressbar>` widget comes with `<slot define="separator">` with empty content inside (actually, this slot is defined inside the `<range>` widget which acts like a base widget for `<progressbar>`, I'll talk about widget extending later).
 
