@@ -29,7 +29,7 @@ fn setup(mut commands: Commands) {
             <button on:press=run!(for counter |c: &mut Counter| c.count += 1)>"+"</button>
             <span s:width="150px" s:justify-content="center">
                 // insert label widget with Counter component to the predefined entity
-                <label {counter} with=Counter/>
+                <label {counter} with=Counter::default()/>
             </span>
             <button on:press=run!(for counter |c: &mut Counter| c.count -= 1)>"-"</button>
         </body>

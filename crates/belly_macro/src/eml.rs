@@ -1,6 +1,6 @@
 use proc_macro2::TokenStream;
 use quote::*;
-use syn::{spanned::Spanned, Expr, ExprPath, Ident};
+use syn::{spanned::Spanned, Expr, Ident};
 use syn_rsx::{Node, NodeAttribute, NodeElement};
 
 use super::context::*;
