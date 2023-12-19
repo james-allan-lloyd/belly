@@ -771,7 +771,7 @@ Let's take a closer look at this piece of code:
 <label bind:value=from!(counter, Counter:count|fmt.c("Value: {c}"))/>
 ```
 
-The thing I want to notice is the `<label>` widget has a `value` param, so you can use the label like this: `<label value="Hello world!/>`. The node produced by `<label>` widget has a `Label` component attached as well. `<label>`'s value param is mapped to `Label.value` component property. It is like `Text.sections[0].value`, but much simpler to type and think.
+The thing I want to notice is the `<label>` widget has a `value` param, so you can use the label like this: `<label value="Hello world!"/>`. The node produced by `<label>` widget has a `Label` component attached as well. `<label>`'s value param is mapped to `Label.value` component property. It is like `Text.sections[0].value`, but much simpler to type and think.
 
 `belly` allows you to bind any param to any component. You can bind `to!` components (when this widget's param changed, change some other component property) of `from!` components (when some other component's property is changed, change this widget's param) or use both `to!` and `from!` (bidirectional binds). There are more bind options actually, but I tell you about them later.
 
